@@ -1,0 +1,94 @@
+﻿@page
+@using static CVO.SummaryModel;
+@model SummaryModel
+@{
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+
+
+<div id="card" class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@Model.cv.FirstName @Model.cv.LastName</h4>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="card-text"><strong>Skills Grade:</strong> @Model.cv.Grade</p>
+                            <p class="card-text"><strong>Nationality:</strong> @Model.cv.nationality</p>
+                            <p class="card-text"><strong>Email:</strong> @Model.cv.Email</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="card-text"><strong>Gender:</strong> @Model.cv.SelectedGender</p>
+                            <p class="card-text"><strong>BirthDate:</strong> @Model.cv.date</p>
+                        </div>
+                    </div>
+                    <hr />
+                    @if (!string.IsNullOrEmpty(Model.cv.PhotoPath))
+                    {
+                        <div class="text-center">
+                            <img src="@Model.cv.PhotoPath" class="img-fluid rounded-circle" alt="Profile Photo" width="200" height="200" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    
+</div>
+
+<div class="form-group text-center">
+    <!--<a class="btn  btn-primary" asp-page="Edit" asp-route-id="@Model.cv.Id">Edit</a>-->
+    <button id="downloadButton" class="btn btn-primary">Download as PDF</button>
+    <a asp-page="Index" class="btn btn-secondary">Back</a>
+</div>
+
+
+<script>
+    document.getElementById('downloadButton').addEventListener('click', function () {
+        // Create a new jsPDF instance
+        var doc = new jspdf.jsPDF();
+
+        // Get the card element by its ID and convert it to a canvas
+        var cardElement = document.getElementById('card');
+        html2canvas(cardElement, {
+            scale: 2, // Zoom level (2 for 200% zoom)
+            scrollX: 0, // Horizontal scroll position
+            scrollY: -window.scrollY, // Vertical scroll position (adjust for page scrolling)
+            windowWidth: cardElement.offsetWidth, // Width of the visible area
+            windowHeight: cardElement.offsetHeight // Height of the visible area
+        }).then(function (canvas) {
+            // Convert the canvas to an image
+            var imgData = canvas.toDataURL('image/png');
+
+            // Adjust the image position and dimensions to focus on a specific area
+            var imgWidth = doc.internal.pageSize.getWidth(); // Use full page width
+            var imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+            var imgX = 0; // Left align the image
+            var imgY = 10; // Add a 10mm offset from the top
+
+            doc.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
+
+            // Save the PDF
+            doc.save('cv_card.pdf');
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

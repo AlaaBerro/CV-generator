@@ -1,0 +1,147 @@
+﻿@page
+@using static CVO.EditModel;
+@model EditModel
+@{
+}
+
+
+    <script>
+        function promptSum() {
+        var num1 = Math.floor(Math.random() * 11); // Generate a random number between 0 and 10
+        var num2 = Math.floor(Math.random() * 11); // Generate a random number between 0 and 10
+        var sum = num1 + num2; // Calculate the sum
+
+
+        var userInput = prompt("What is the sum of " + num1 + " and " + num2 + "?");
+
+        if (userInput !== null) {
+        var userSum = parseInt(userInput); // Parse the user's input as an integer
+
+        if (!isNaN(userSum) && userSum === sum) {
+        alert("Correct! The sum of " + num1 + " and " + num2 + " is indeed " + sum + ".");
+        return true; // Return true if the answer is correct
+        } else {
+        alert("Incorrect. The correct sum of " + num1 + " and " + num2 + " is " + sum + ".");
+        return false; // Return false if the answer is incorrect
+        }
+        } else {
+        alert("You did not enter an answer.");
+        return false; // Return false if no answer was entered
+        }
+        }
+    </script>
+
+
+<div class="text-center display-4">
+    Create your CV
+</div>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <form method="post" enctype="multipart/form-data">
+
+                <input hidden asp-for="Input.Id" />
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.FirstName"><strong>@Html.DisplayNameFor(m => m.Input.FirstName)</strong></label>
+                    <input class="form-control" asp-for="Input.FirstName" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.LastName"><strong>@Html.DisplayNameFor(m => m.Input.LastName)</strong></label>
+                    <input class="form-control" asp-for="Input.LastName" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.date"><strong>@Html.DisplayNameFor(m => m.Input.date)</strong></label>
+                    <input asp-for="Input.date" class="form-control" />
+                    <span asp-validation-for="Input.date" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.SelectedGender"><strong>Gender</strong></label><br />
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Input.SelectedGender" value="Male" />
+                        <label class="form-check-label">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Input.SelectedGender" value="Female" />
+                        <label class="form-check-label">Female</label>
+                    </div>
+                    <span asp-validation-for="Input.SelectedGender" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.nationality"><strong>@Html.DisplayNameFor(m => m.Input.nationality)</strong></label><br />
+                    <select asp-for="Input.nationality" asp-items="Model.items" class="form-control"></select>
+                    <span asp-validation-for="Input.nationality" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Skills</strong></label><br />
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="Input.SelectedSkills" value="@skill" />
+                            <label class="form-check-label">@skill</label>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Email"><strong>@Html.DisplayNameFor(m => m.Input.Email)</strong></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.ConfirmEmail"><strong>@Html.DisplayNameFor(m => m.Input.ConfirmEmail)</strong></label>
+                    <input asp-for="Input.ConfirmEmail" class="form-control" />
+                    <span asp-validation-for="Input.ConfirmEmail" class="text-danger"></span>
+                </div>
+               
+
+                <div class="form-group">
+                    <label asp-for="Input.PhotoFile"><strong>Photo</strong></label>
+                    <input asp-for="Input.PhotoFile" type="file" class="form-control" />
+                    <span asp-validation-for="Input.PhotoFile" class="text-danger"></span>
+                </div>
+
+                <input asp-for="Input.PhotoPath" type="hidden" />
+  
+
+            @if (!string.IsNullOrEmpty(Model.Input.PhotoPath))
+            {
+                <div class="form-group">
+                        <label><strong>Existing Photo</strong></label>
+                    <div>
+                        <img src="@Model.Input.PhotoPath" alt="Existing Photo" class="img-thumbnail" style="max-width: 200px;" />
+                    </div>
+                </div>
+            }
+
+            <br />
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}
+
+

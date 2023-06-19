@@ -1,0 +1,58 @@
+﻿@page
+@model CVO.IndexModel
+@{
+}
+
+@if (Model.CVS.Count() > 0)
+{
+        <h1 class="display-4">Browse CV</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>Email</th>
+                                <th>Nationality</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var cv in Model.CVS)
+                        {
+                                    <tr>
+                                        <td>@cv.FirstName</td>
+                                        <td>@cv.LastName</td>
+                                        <td>@cv.SelectedGender</td>
+                                        <td>@cv.Email</td>
+                                        <td>@cv.nationality</td>
+                                        <td>@cv.Grade</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-info" asp-page="Summary" asp-route-id="@cv.Id">Details</a>
+                                            <a class="btn btn-sm btn-primary" asp-page="Edit" asp-route-id="@cv.Id">Edit</a>
+                                            <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@cv.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+}
+
+else
+{
+        <div class="alert alert-info">
+            No CVs found.
+        </div>
+}
+
+
+
+

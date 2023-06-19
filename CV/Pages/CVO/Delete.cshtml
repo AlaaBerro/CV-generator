@@ -1,0 +1,16 @@
+﻿@page
+@model CV.Pages.CVO.DeleteModel
+@{
+}
+
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this item?</p>
+
+
+<form method="post">
+    <input type="hidden" asp-for="Input.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="/CVO/Index" class="btn btn-secondary">Cancel</a>
+</form>
